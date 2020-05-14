@@ -176,9 +176,13 @@ Nous avons rédigé un article scientifique décrivant ces travaux et les résul
 %   \item Généraliser/formaliser le modèle adopté par RLS : un CRDT intégrant des techniques d'OT pour gérer des opérations autrement non-commutatives. Voir les possibilités offertes par ce modèle
 % \end{itemize}
 
-Actuellement, nous travaillons sur une seconde validation de \emph{RenamableLogootSplit}. Dans le cadre de cette nouvelle validation, nous permettons les opérations de renommage concurrentes.
+Actuellement, nous travaillons sur une seconde validation expérimentale de \emph{RenamableLogootSplit}.
+Dans le cadre de cette nouvelle validation, nous permettons les opérations de renommage concurrentes.
 Nous souhaitons ainsi tester le bon fonctionnement de notre mécanisme pour gérer les renommages concurrents et évaluer ses performances.
-Ces expérimentations nous permettront aussi de confirmer et d'illustrer nos résultats théoriques sur l'impact d'opérations de renommage concurrentes sur la taille de la structure de données.
+Ce dernier consiste à définir un ordre de priorité sur les opérations de renommage concurrentes.
+Cet ordre permet de déterminer quelle opération appliquer d'un ensemble d'opérations de renommage concurrentes.
+Si un replica a précédemment appliqué une opération de renommage concurrente non-prioritaire, des fonctions de transformation lui permettent d'annuler son effet.
+Les expériences nous permettront aussi de confirmer et d'illustrer nos résultats théoriques de l'impact d'opérations de renommage concurrentes sur la taille de la structure de données.
 \\
 
 En marge de cette seconde validation, d'autres pistes de recherche restent à explorer.
@@ -187,7 +191,7 @@ L'objectif de ces stratégies serait de déclencher une opération de renommage 
 Pour ce faire, les replicas pourraient se baser sur des métriques de l'état de la structure (taille de la structure, taille des identifiants...), mais aussi prendre en compte des informations liées à l'état du système (nombre de replicas total, nombre de replicas actuellement connectés...).
 \\
 
-Une seconde piste de travail possible consisterait en la proposition et l'évaluation d'une nouvelle métrique pour déterminer quel renommage privilégier en cas de renommages concurrents pour minimiser les traitements effectués du point de vue global du système.
+Une seconde piste de travail possible consisterait en la proposition et l'évaluation d'une nouvelle métrique pour déterminer quel renommage privilégier en cas de renommages concurrents, afin de minimiser les traitements effectués du point de vue global du système.
 Actuellement, nous définissons et utilisons un ordre de priorité sur les différents replicas pour effectuer ce choix.
 Bien que fonctionnelle, cette solution autorise des scénarios particulièrement inefficaces.
 Par exemple, un replica revenant d'une longue absence peut forcer le reste des pairs à annuler les renommages qu'ils ont effectué pendant ce temps s'il a généré une opération de renommage prioritaire.
