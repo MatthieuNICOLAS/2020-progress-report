@@ -1,0 +1,326 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}  % unnecessary with TeXLive 2018+
+\usepackage{xcolor}
+
+\usepackage{acronym} % \ac[p], \acl[p], \acs[p], \acf[p]
+\usepackage{etoolbox}
+\patchcmd{\thebibliography}{\section*{\refname}}{}{}{} % Remove auto-generated "References" by \bibliography
+\usepackage{hyperref}
+
+\usepackage[draft,inline,nomargin,index]{fixme}
+\fxsetup{theme=colorsig,mode=multiuser,inlineface=\itshape,envface=\itshape}
+\FXRegisterAuthor{mn}{amn}{Matthieu}
+
+% Acronyms
+% --------
+\acrodef{CRDT}[CRDT]{Conflict-free Replicated Data Type}
+\acrodefplural{CRDT}[CRDTs]{Conflict-free Replicated Data Types}
+\acrodef{Loria}{Lorraine Research Laboratory in Computer Science and its Applications}
+\acrodef{OT}{Operational Transformation}
+
+\topmargin -20 mm
+\oddsidemargin -3 mm      %   Left margin on odd-numbered pages.
+\evensidemargin \oddsidemargin    %   Left margin on even-numbered pages.
+%\marginparwidth 5 mm       %   Width of marginal notes.
+\textwidth 170 mm % Width of text line.
+\textheight 235 mm % Height of text page.
+
+
+\parindent 0mm
+
+\newcommand{\commentaire}[1]{\small\textit{#1}}
+
+\begin{document}
+\hspace{-8.5mm} \fbox{\LARGE École Doctorale IAEM -- Commission de mention informatique}
+
+\bigskip
+
+\centerline{\Large\textbf{Progress Report and CSI Report -- 2019-20}}
+\bigskip
+\bigskip
+
+\commentaire{%
+This report contains 4 parts to be filled in French or English:\\
+  -- an administrative form, to be filled by the PhD student\\
+  -- the progress report of the PhD thesis, to be filled by the PhD
+  student\\
+  -- the conclusion of the supervisors\\
+  -- the report of the Comité de Suivi Individuel (CSI), to be
+  filled by the CSI\\}
+
+\commentaire{%
+For the 4th part, the PhD student must plan a meeting with the
+“référent scientifique” (first member of his/her CSI) in May. The
+goal of this meeting is to discuss the progress of the
+thesis. Prior to this meeting, the other parts must be filled and
+the full document e-mailed to the référent scientifique.\\}
+
+\commentaire{%
+\textbf{After this meeting}, the référent scientifique fills the 4th
+part and signs it.  The PhD student has to make it signed also by the
+second member of the CSI.  The whole document (PDF) has then to be
+uploaded by the PhD student to her/his ADUM profile and sent to the
+supervisors and the CMI Doctoral school
+(ed-iaem-cmi-contact@univ-lorraine.fr) before June 6th.\\}
+
+\commentaire{%
+\textcolor{red}{In order to facilitate the process, the different parts can be
+prepared and signed (electronically) as separate documents, but
+they must be merged again as a single PDF file for uploading to
+ADUM.}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bigskip
+\hrule
+
+\section*{\fbox{Administrative information} \textit{\small (to be filled by the PhD student)}}
+
+\noindent\textbf{PhD student:}
+Matthieu Nicolas
+\\
+\noindent\textbf{Current PhD year in 2019-20:}
+3A
+\\
+\noindent\textbf{Laboratory:}
+Loria
+\\
+\noindent\textbf{Supervisor(s):}
+Olivier Perrin et Gérald Oster
+\\
+\noindent\textbf{Title of the PhD thesis:}
+(Ré)Identification efficace dans les types de données répliquées sans conflit (CRDTs)
+\\
+\noindent\textbf{Fundings for the PhD thesis:}
+Contrat doctoral
+\\
+
+\noindent\textbf{Members of the CSI:}
+\begin{itemize}
+\item\textbf{scientific member:}
+  Stephan Merz
+\item\textbf{auxiliary member:}
+  Ye-Qiong Song
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section*{\fbox{Progress report} \textit{\small (to be filled by the PhD student)}}
+
+\noindent\textbf{Short description of the subject:}
+\commentaire{%
+  general context, considered approach, scientific objectives
+  compared to the state of the art\\}
+
+Dans le cadre de mes travaux de recherche, j'étudie et travaille sur les \acfp{CRDT}.
+Conçus pour les systèmes distribués hautement disponibles, ces types de données répliqués intégrent un mécanisme de résolution de conflits directement au sein de leur spécification afin de supporter nativement les modifications concurrentes.
+Pour résoudre les conflits de manière déterministe, les \acp{CRDT} utilisent généralement des identifiants qu'ils associent aux éléments stockés au sein de la structure de données.
+Cependant, selon le type de \ac{CRDT}, les identifiants doivent respecter un ensemble de contraintes telles qu'être unique ou appartenir à un espace dense.
+Dans certains cas, ces contraintes empêchent de borner la taille des identifiants.
+La taille des identifiants croît alors continuellement avec le nombre de modifications effectuées, aggravant le surcoût lié à l'utilisation des \acp{CRDT} par rapport aux structures de données traditionnelles.
+Les mesures que nous avons réalisé ont permis d'illustrer que la proportion de méta-données pouvait augmenter au fil du temps jusqu'à représenter 99\% de la structure de données.
+Ce surcoût décourage l'adoption des \acp{CRDT} dans les systèmes distribués.
+Le but de cette thèse est de proposer des solutions pour pallier ce problème.
+\\
+
+L'approche que nous proposons consiste à intégrer un mécanisme de renommage au sein des \acp{CRDT}.
+Ce mécanisme a pour but de permettre aux différents noeuds de renommer les identifiants afin de réduire leur taille, tout en respectant les contraintes imposées aux \acp{CRDT}.
+En particulier, le renommage doit se faire sans aucune coordination entre les noeuds.
+Afin de valider cette approche, nous avons conçu, implémenté et évalué un tel mécanisme pour \emph{LogootSplit}, un \ac{CRDT} souffrant particulièrement du problème de croissance des identifiants.
+Ces travaux ont conduit à la conception d'un nouveau \ac{CRDT}, \emph{RenamableLogootSplit}.
+Nos évaluations montrent que le mécanisme de renommage permet de réinitialiser à terme la taille de la structure de données, mais aussi d'améliorer le temps d'intégration des modifications par rapport à \emph{LogootSplit}.
+\\
+
+\noindent\textbf{Main results of the year:}
+\commentaire{%
+  studies and works achieved, results obtained with respect to the
+  objectives of the thesis; difficulties encountered\\}
+
+% \begin{itemize}
+%   \item Optimisation du code
+%   \item Validation expérimentale de l'approche proposée en mode centralisée
+%   \item Publication de ces résultats dans le cadre d'un workshop de spécialistes du domaine
+% \end{itemize}
+
+Cette année, nous avons procédé à une première validation de \emph{RenamablelogootSplit} en prenant comme hypothèse l'absence d'opérations de renommage concurrentes.
+Nous avons effectué cette validation de manière expérimentale, par le biais de simulations reproduisant la rédaction d'un article par un ensemble de collaborateurs.
+Ces simulations nous ont tout d'abord permis de vérifier que l'ensemble des replicas convergeaient.
+Ce résultat nous a permis d'accroître la confiance que nous avons en la correction de \emph{RenamableLogootSplit}, à défaut d'en proposer une preuve formelle.
+\\
+
+Nous avons ensuite utilisé les traces issues de ces simulations pour comparer les performances de \emph{RenamableLogootSplit} par rapport à \emph{LogootSplit} sur les divers aspects impactés par l'accroissement des méta-données : taille de la structure, consommation de la bande-passante et temps d'intégration des modifications.
+Les benchmarks que nous avons réalisé montrent que \emph{RenamableLogootSplit} obtient de meilleurs résultats que \emph{LogootSplit} sur chacun de ces aspects :
+le renommage permet à terme de réinitialiser la quantité de méta-données de la structure et la taille des identifiants.
+De plus, le renommage permet aussi d'optimiser l'état de la structure.
+Cette optimisation permet d'intégrer plus rapidement les modifications suivantes.
+\\
+
+Nous avons aussi mesuré le temps d'intégration de l'opération de renommage elle-même, en fonction de la taille de la structure de données.
+Les résultats obtenus révèlent que cette opération est coûteuse : son temps d'intégration varie de 100ms jusqu'à 1s en fonction de la taille de la structure.
+Si cette opération est déclenchée trop tardivement, elle peut être remarquée par les utilisateurs et impacter négativement leur expérience.
+\\
+
+Nous avons rédigé un article scientifique décrivant ces travaux et les résultats obtenus. Ce papier a été publié et présenté dans le cadre du workshop PaPoC'20, qui regroupait de nombreux spécialistes du domaine des \acp{CRDT}.
+\\
+
+\noindent\textbf{Plan for next year:}
+\commentaire{%
+  remaining problems to be considered, approach; precise planning (in
+  particular for those who are at least in 3rd year, for the report
+  writing and the defense)\\}
+
+% \begin{itemize}
+%   \item Validation de la version distribuée de RenamableLogootSplit
+%   \item Proposer des stratégies pour déclencher des renommages tout en minimisant les risques de concurrence
+%   \item Proposer des stratégies pour minimiser les calculs effectués globalement par le système en cas de renommages concurrents
+%   \item Adapter RLS pour proposer un Sequence CRDT avec une opération move
+%   \item Généraliser/formaliser le modèle adopté par RLS : un CRDT intégrant des techniques d'OT pour gérer des opérations autrement non-commutatives. Voir les possibilités offertes par ce modèle
+% \end{itemize}
+
+Actuellement, nous travaillons sur une seconde validation de \emph{RenamableLogootSplit}. Dans le cadre de cette nouvelle validation, nous permettons les opérations de renommage concurrentes.
+Nous souhaitons ainsi tester le bon fonctionnement de notre mécanisme pour gérer les renommages concurrents et évaluer ses performances.
+Ces expérimentations nous permettront aussi de confirmer et d'illustrer nos résultats théoriques sur l'impact d'opérations de renommage concurrentes sur la taille de la structure de données.
+\\
+
+En marge de cette seconde validation, d'autres pistes de recherche restent à explorer.
+Tout d'abord, il serait intéressant de proposer et d'évaluer plusieurs stratégies pour déterminer quand renommer la structure.
+L'objectif de ces stratégies serait de déclencher une opération de renommage avant que cette dernière ne soit trop coûteuse à appliquer sur la structure de données, mais tout en minimisant la probabilité que des opérations de renommage ne soient générées de manière concurrente par les autres replicas.
+Pour ce faire, les replicas pourraient se baser sur des métriques de l'état de la structure (taille de la structure, taille des identifiants...), mais aussi prendre en compte des informations liées à l'état du système (nombre de replicas total, nombre de replicas actuellement connectés...).
+\\
+
+Une seconde piste de travail possible consisterait en la proposition et l'évaluation d'une nouvelle métrique pour déterminer quel renommage privilégier en cas de renommages concurrents pour minimiser les traitements effectués du point de vue global du système.
+Actuellement, nous définissons et utilisons un ordre de priorité sur les différents replicas pour effectuer ce choix.
+Bien que fonctionnelle, cette solution permet des scénarios où un replica revenant d'une longue absence force le reste des pairs à annuler les renommages qu'ils ont effectué pendant ce temps car il a généré une opération de renommage prioritaire.
+La difficulté de la définition de cette nouvelle métrique réside dans la nécessité que l'ensemble des replicas converge.
+Les replicas doivent donc déterminer comme prioritaire une même opération de renommage d'un ensemble d'opérations concurrentes, peu importe leur état à la réception de cette dernière et l'ordre de réception.
+Cette métrique doit donc se baser sur des informations stables.
+Par exemple, nous pourrions utiliser une mesure du travail effectué avant le renommage (nombre de modifications, taille de la structure...).
+\\
+
+\mnnote{TODO: Ajouter planning détaillé}
+\\
+
+\noindent\textbf{Publications:}
+\commentaire{%
+  if any\\}
+\bibliographystyle{plain}
+\bibliography{publications}
+\nocite{*}
+
+\noindent\textbf{Project after the thesis:}
+\commentaire{%
+  for 3rd year (and beyond) PhD students: professional project\\}
+J'envisage actuellement soit de poursuivre une carrière académique en tant qu'enseigneur-chercheur, soit de m'orienter vers une carrière d'ingénieur R\&D au sein de l'académie ou de l'industrie.
+\\
+
+\noindent\textbf{Scientific and professional modules validated:}
+\commentaire{%
+  list of all modules validated from the beginning of the thesis (do
+  not forget to add them in Adum, together with your publications)}
+\paragraph{\footnotesize Scientific modules}
+  \begin{itemize}
+      \itemsep0em
+      \item Réplication et cohérence des données
+      \item Participation à l'école d'été SATIS 2018
+      \item Participation à l'école d'été VTSA 2019
+  \end{itemize}
+\paragraph{\footnotesize Professional modules}
+  \begin{itemize}
+      \itemsep0em
+      \item Fi4 152 E Sauveteur Secouriste du Travail (SST)
+      \item Fi4 162 C Formation à la communication orale et corporelle en milieu professionnel
+      \item Fi4 282 Outils numériques pour la pédagogie (plateforme Arche, studio professeur)
+      \item Fi4 305 Culture de l’intégrité scientifique
+      \item PA1.1 MDD 14 - Eléments d’innovations pédagogiques
+  \end{itemize}
+
+\noindent\textbf{Date and signature of the PhD student}
+
+..................................................
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section*{\fbox{Opinion of the supervisors} \textit{\small (to be filled by the supervisors)}}
+
+\noindent\textbf{Opinion on this progress report:}\\
+..................................................
+\\
+
+\noindent\textbf{Agreement for an additional year?}
+\commentaire{%
+  Yes/No (if No, please justify)\\}
+..................................................
+\\
+
+\noindent\textbf{Date of the defense:}
+\commentaire{%
+  this can be an approximation\\}
+..................................................
+\\
+
+
+\noindent\textbf{Date and signature of the PhD supervisors}
+
+..................................................
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section*{\fbox{Report of the Comité de Suivi Individuel} \textit{\small (to be filled by the ré\-fé\-rent scientifique)}}
+
+\commentaire{%
+  \textcolor{red}{The questions below are suggestions. For each
+    section, the report can be as short as “Yes” or more detailed
+    according to the feeling of the CSI.\\}}
+
+\noindent\textbf{Is the student confident with the PhD progression?}
+\commentaire{%
+  E.g.: How does the PhD student view the progress of
+  her/his thesis? How often does the student meet with her/his
+  supervisors? How is the student’s relationship with her/his
+  supervisors? In case of problems, does the student know who to
+  discuss these issues with?\\}
+..................................................
+\\
+
+\noindent\textbf{Is the PhD on good tracks?}
+\commentaire{%
+  E.g: Is the student comfortable with his/her thesis topic? Did
+  she/he embraced the subject? Do you have any comments or advice
+  concerning publications? Does the student have opportunities to
+  present her/his work? Do you have noteworthy concerns about the
+  progression of the thesis?\\}
+..................................................
+\\
+
+\noindent\textbf{Is the professional project sound?}
+\commentaire{%
+  E.g.: What is the professional project of the PhD student for after
+  the PhD? Is she/he aware of the various options and associated
+  expectations (postdoc abroad or in France, industrial R\&D,
+  application periods, teaching requirements, etc.)? Have contacts
+  been established? Do you have comments about the PhD student’s
+  plans for her/his training courses/schools?\\}
+..................................................
+\\
+
+\noindent\textbf{Conclusion:}
+No problem for an additional registration / Interview with the ED
+recommended
+
+\bigskip
+
+\noindent\textbf{Date:}
+..................................................
+\\
+
+\noindent\textbf{Signatures:}
+
+\begin{tabular}{p{5cm}p{12cm}}
+  PhD student & Two members of the CSI\\
+  ........................................
+  &
+  ........................................
+  ........................................
+\end{tabular}
+
+\end{document}
