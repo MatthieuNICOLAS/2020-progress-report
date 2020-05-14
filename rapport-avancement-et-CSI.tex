@@ -117,17 +117,22 @@ Pour résoudre les conflits de manière déterministe, les \acp{CRDT} utilisent 
 Cependant, selon le type de \ac{CRDT}, les identifiants doivent respecter un ensemble de contraintes telles qu'être unique ou appartenir à un espace dense.
 Dans certains cas, ces contraintes empêchent de borner la taille des identifiants.
 La taille des identifiants croît alors continuellement avec le nombre de modifications effectuées, aggravant le surcoût lié à l'utilisation des \acp{CRDT} par rapport aux structures de données traditionnelles.
-Les mesures que nous avons réalisé ont permis d'illustrer que la proportion de méta-données pouvait augmenter au fil du temps jusqu'à représenter 99\% de la structure de données.
 Ce surcoût décourage l'adoption des \acp{CRDT} dans les systèmes distribués.
 Le but de cette thèse est de proposer des solutions pour pallier ce problème.
 \\
 
-L'approche que nous proposons consiste à intégrer un mécanisme de renommage au sein des \acp{CRDT}.
+Nous nous sommes intéressé à un \ac{CRDT} souffrant particulièrement du problème de croissance des identifiants : LogootSplit.
+Nous avons mis en place des benchmarks pour évaluer l'impact de la croissance des identifiants sur cette structure de données.
+Les mesures que nous avons réalisé ont montré que la proportion de méta-données pouvait augmenter au fil du temps jusqu'à représenter 99\% de la structure de données.
+Ce résultat a confirmé l'intérêt d'apporter des solutions au problème soulevé.
+\\
+
+Pour y répondre, nous proposons d'intégrer un mécanisme de renommage au sein des \acp{CRDT}.
 Ce mécanisme a pour but de permettre aux différents noeuds de renommer les identifiants afin de réduire leur taille, tout en respectant les contraintes imposées aux \acp{CRDT}.
 En particulier, le renommage doit se faire sans aucune coordination entre les noeuds.
-Afin de valider cette approche, nous avons conçu, implémenté et évalué un tel mécanisme pour \emph{LogootSplit}, un \ac{CRDT} souffrant particulièrement du problème de croissance des identifiants.
-Ces travaux ont conduit à la conception d'un nouveau \ac{CRDT}, \emph{RenamableLogootSplit}.
-Nos évaluations montrent que le mécanisme de renommage permet de réinitialiser à terme la taille de la structure de données, mais aussi d'améliorer le temps d'intégration des modifications par rapport à \emph{LogootSplit}.
+Afin de valider cette approche, nous avons conçu et implémenté un nouveau \ac{CRDT}, RenamableLogootSplit, qui incorpore un tel mécanisme à LogootSplit.
+% Nous avons alors procédé à une validation de notre approche par le biais d'expériences.
+% Dans ces conditions, nos évaluations montrent que le mécanisme de renommage permet de réinitialiser à terme la taille de la structure de données, mais aussi d'améliorer le temps d'intégration des modifications par rapport à LogootSplit.
 \\
 
 \noindent\textbf{Main results of the year:}
@@ -141,14 +146,14 @@ Nos évaluations montrent que le mécanisme de renommage permet de réinitialise
 %   \item Publication de ces résultats dans le cadre d'un workshop de spécialistes du domaine
 % \end{itemize}
 
-Cette année, nous avons procédé à une première validation de \emph{RenamablelogootSplit} en prenant comme hypothèse l'absence d'opérations de renommage concurrentes.
+Cette année, nous avons procédé à une première validation de RenamablelogootSplit en prenant comme hypothèse l'absence d'opérations de renommage concurrentes.
 Nous avons effectué cette validation de manière expérimentale, par le biais de simulations reproduisant la rédaction d'un article par un ensemble de collaborateurs.
 Ces simulations nous ont tout d'abord permis de vérifier que l'ensemble des replicas convergeaient.
-Ce résultat nous a permis d'accroître la confiance que nous avons en la correction de \emph{RenamableLogootSplit}, à défaut d'en proposer une preuve formelle.
+Ce résultat nous a permis d'accroître la confiance que nous avons en la correction de RenamableLogootSplit, à défaut d'en proposer une preuve formelle.
 \\
 
-Nous avons ensuite utilisé les traces issues de ces simulations pour comparer les performances de \emph{RenamableLogootSplit} par rapport à \emph{LogootSplit} sur les divers aspects impactés par l'accroissement des méta-données : taille de la structure, consommation de la bande-passante et temps d'intégration des modifications.
-Les benchmarks que nous avons réalisé montrent que \emph{RenamableLogootSplit} obtient de meilleurs résultats que \emph{LogootSplit} sur chacun de ces aspects :
+Nous avons ensuite utilisé les traces issues de ces simulations pour comparer les performances de RenamableLogootSplit par rapport à LogootSplit sur les divers aspects impactés par l'accroissement des méta-données : taille de la structure, consommation de la bande-passante et temps d'intégration des modifications.
+Les benchmarks que nous avons réalisé montrent que RenamableLogootSplit obtient de meilleurs résultats que LogootSplit sur chacun de ces aspects :
 le renommage permet à terme de réinitialiser la quantité de méta-données de la structure et la taille des identifiants.
 De plus, le renommage permet aussi d'optimiser l'état de la structure.
 Cette optimisation permet d'intégrer plus rapidement les modifications suivantes.
@@ -176,12 +181,12 @@ Nous avons rédigé un article scientifique décrivant ces travaux et les résul
 %   \item Généraliser/formaliser le modèle adopté par RLS : un CRDT intégrant des techniques d'OT pour gérer des opérations autrement non-commutatives. Voir les possibilités offertes par ce modèle
 % \end{itemize}
 
-Actuellement, nous travaillons sur une seconde validation expérimentale de \emph{RenamableLogootSplit}.
-Dans le cadre de cette nouvelle validation, nous permettons les opérations de renommage concurrentes.
+Actuellement, nous travaillons sur une seconde validation expérimentale de RenamableLogootSplit.
+Dans le cadre de cette nouvelle validation, nous déclenchons des opérations de renommage concurrentes.
 Nous souhaitons ainsi tester le bon fonctionnement de notre mécanisme pour gérer les renommages concurrents et évaluer ses performances.
 Ce dernier consiste à définir un ordre de priorité sur les opérations de renommage concurrentes.
 Cet ordre permet de déterminer quelle opération appliquer d'un ensemble d'opérations de renommage concurrentes.
-Si un replica a précédemment appliqué une opération de renommage concurrente non-prioritaire, des fonctions de transformation lui permettent d'annuler son effet.
+Si un replica a précédemment appliqué une opération de renommage concurrente non-prioritaire, des fonctions de transformation lui permettent d'annuler l'effet de cette dernière.
 Les expériences nous permettront aussi de confirmer et d'illustrer nos résultats théoriques de l'impact d'opérations de renommage concurrentes sur la taille de la structure de données.
 \\
 
@@ -191,14 +196,15 @@ L'objectif de ces stratégies serait de déclencher une opération de renommage 
 Pour ce faire, les replicas pourraient se baser sur des métriques de l'état de la structure (taille de la structure, taille des identifiants...), mais aussi prendre en compte des informations liées à l'état du système (nombre de replicas total, nombre de replicas actuellement connectés...).
 \\
 
-Une seconde piste de travail possible consisterait en la proposition et l'évaluation d'une nouvelle métrique pour déterminer quel renommage privilégier en cas de renommages concurrents, afin de minimiser les traitements effectués du point de vue global du système.
+Une seconde piste de travail possible consisterait en la proposition et l'évaluation d'une nouvelle stratégie pour déterminer quel renommage privilégier en cas de renommages concurrents.
 Actuellement, nous définissons et utilisons un ordre de priorité sur les différents replicas pour effectuer ce choix.
 Bien que fonctionnelle, cette solution autorise des scénarios particulièrement inefficaces.
 Par exemple, un replica revenant d'une longue absence peut forcer le reste des pairs à annuler les renommages qu'ils ont effectué pendant ce temps s'il a généré une opération de renommage prioritaire.
-La difficulté de la définition de cette nouvelle métrique réside dans la nécessité que l'ensemble des replicas converge.
-Les replicas doivent donc déterminer comme prioritaire une même opération de renommage d'un ensemble d'opérations concurrentes, peu importe leur état à la réception de cette dernière et l'ordre de réception.
-Cette métrique doit donc se baser sur des informations stables.
-Par exemple, nous pourrions utiliser une mesure du travail effectué avant le renommage (nombre de modifications, taille de la structure...).
+Il serait donc utile de définir une nouvelle stratégie minimisant les traitements effectués du point de vue global du système.
+La difficulté de sa conception réside dans le fait que l'ensemble des replicas doit converger.
+Les replicas doivent donc déterminer comme prioritaire une même opération de renommage d'un ensemble d'opérations concurrentes, indépendamment de leur état à la réception de cette dernière et de l'ordre de réception.
+Cette stratégie doit donc uniquement se baser sur des informations stables.
+Dans cette optique, nous pourrions par exemple utiliser une métrique du travail effectué avant le renommage (nombre de modifications, taille de la structure, nombre de participants...) pour prendre une décision.
 \\
 
 \mnnote{TODO: Ajouter planning détaillé}
