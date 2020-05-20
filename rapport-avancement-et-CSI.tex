@@ -121,7 +121,7 @@ Ce surcoût décourage l'adoption des \acp{CRDT} dans les systèmes distribués.
 Le but de cette thèse est de proposer des solutions pour pallier ce problème.
 \\
 
-Nous nous sommes intéressé à un \ac{CRDT} souffrant particulièrement du problème de croissance des identifiants : LogootSplit.
+Nous nous sommes intéressés à un \ac{CRDT} souffrant particulièrement du problème de croissance des identifiants : LogootSplit.
 Nous avons mis en place des benchmarks pour évaluer l'impact de la croissance des identifiants sur cette structure de données.
 Les mesures que nous avons réalisé ont montré que la proportion de méta-données pouvait augmenter au fil du temps jusqu'à représenter 99\% de la structure de données.
 Ce résultat a confirmé l'intérêt d'apporter des solutions au problème soulevé.
@@ -160,7 +160,7 @@ Cette optimisation permet d'intégrer plus rapidement les modifications suivante
 \\
 
 Nous avons aussi mesuré le temps d'intégration de l'opération de renommage elle-même, en fonction de la taille de la structure de données.
-Les résultats obtenus révèlent que cette opération est coûteuse : son temps d'intégration varie de 100ms jusqu'à 1s en fonction de la taille de la structure.
+Les résultats obtenus révèlent que cette opération est coûteuse~: son temps d'intégration varie de 100ms jusqu'à 1s en fonction de la taille de la structure.
 Si cette opération est déclenchée trop tardivement, elle peut être remarquée par les utilisateurs et impacter négativement leur expérience.
 \\
 
@@ -182,10 +182,10 @@ Nous avons rédigé un article scientifique décrivant ces travaux et les résul
 % \end{itemize}
 
 Actuellement, nous travaillons sur une seconde validation expérimentale de RenamableLogootSplit.
-Dans le cadre de cette nouvelle validation, nous déclenchons des opérations de renommage concurrentes.
+Dans le cadre de cette nouvelle validation, nous déclenchons des opérations concurrentes de renommage.
 Nous souhaitons ainsi tester le bon fonctionnement de notre mécanisme pour gérer les renommages concurrents et évaluer ses performances.
-Ce dernier consiste à définir un ordre de priorité sur les opérations de renommage concurrentes.
-Cet ordre permet de déterminer quelle opération appliquer d'un ensemble d'opérations de renommage concurrentes.
+Ce mécanisme consiste à définir un ordre de priorité sur les opérations de renommage concurrentes.
+Cet ordre permet de choisir de manière déterministe quelle opération appliquer à partir d'un ensemble d'opérations de renommage concurrentes.
 Si un replica a précédemment appliqué une opération de renommage concurrente non-prioritaire, des fonctions de transformation lui permettent d'annuler l'effet de cette dernière.
 Les expériences nous permettront aussi de confirmer et d'illustrer nos résultats théoriques de l'impact d'opérations de renommage concurrentes sur la taille de la structure de données.
 \\
@@ -220,7 +220,7 @@ Dans cette optique, nous pourrions par exemple utiliser une métrique du travail
 \noindent\textbf{Project after the thesis:}
 \commentaire{%
   for 3rd year (and beyond) PhD students: professional project\\}
-J'envisage actuellement soit de poursuivre une carrière académique en tant qu'enseigneur-chercheur, soit de m'orienter vers une carrière d'ingénieur R\&D au sein de l'académie ou de l'industrie.
+J'envisage actuellement soit de poursuivre une carrière dans l'académie en tant qu'enseigneur-chercheur, soit de m'orienter vers une carrière d'ingénieur R\&D au sein de l'académie ou de l'industrie.
 \\
 
 \noindent\textbf{Scientific and professional modules validated:}
