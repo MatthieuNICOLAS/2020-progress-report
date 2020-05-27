@@ -188,12 +188,14 @@ Ce mécanisme consiste à définir un ordre de priorité sur les opérations de 
 Cet ordre permet de choisir de manière déterministe quelle opération appliquer à partir d'un ensemble d'opérations de renommage concurrentes.
 Si un replica a précédemment appliqué une opération de renommage concurrente non-prioritaire, des fonctions de transformation lui permettent d'annuler l'effet de cette dernière.
 Les expériences nous permettront aussi de confirmer et d'illustrer nos résultats théoriques de l'impact d'opérations de renommage concurrentes sur la taille de la structure de données.
+Notre objectif est de compléter ces travaux et de rédiger un article les présentant pour cet automne 2020.
 \\
 
 En marge de cette seconde validation, d'autres pistes de recherche restent à explorer.
 Tout d'abord, il serait intéressant de proposer et d'évaluer plusieurs stratégies pour déterminer quand renommer la structure.
 L'objectif de ces stratégies serait de déclencher une opération de renommage avant que cette dernière ne soit trop coûteuse à appliquer sur la structure de données, mais tout en minimisant la probabilité que des opérations de renommage ne soient générées de manière concurrente par les autres replicas.
 Pour ce faire, les replicas pourraient se baser sur des métriques de l'état de la structure (taille de la structure, taille des identifiants...), mais aussi prendre en compte des informations liées à l'état du système (nombre de replicas total, nombre de replicas actuellement connectés...).
+Nous planifions d'étudier cette piste de recherche de l'automne 2020 au printemps 2021.
 \\
 
 Une seconde piste de travail possible consisterait en la proposition et l'évaluation d'une nouvelle stratégie pour déterminer quel renommage privilégier en cas de renommages concurrents.
@@ -205,10 +207,24 @@ La difficulté de sa conception réside dans le fait que l'ensemble des replicas
 Les replicas doivent donc déterminer comme prioritaire une même opération de renommage d'un ensemble d'opérations concurrentes, indépendamment de leur état à la réception de cette dernière et de l'ordre de réception.
 Cette stratégie doit donc uniquement se baser sur des informations stables.
 Dans cette optique, nous pourrions par exemple utiliser une métrique du travail effectué avant le renommage (nombre de modifications, taille de la structure, nombre de participants...) pour prendre une décision.
+Actuellement, nous ne prévoyons pas d'explorer cette piste de recherche dans le cadre de cette thèse.
+Cependant, en fonction de notre progression sur les autres tâches, nous pourrons reconsidérer la question et démarrer des travaux sur ce sujet.
 \\
 
-\mnnote{TODO: Ajouter planning détaillé}
+Enfin, l'année à venir sera consacrée à la rédaction du manuscript de thèse.
+Cette tâche sera effectuée tout au long de l'année, en parallèle des différentes pistes de travail présentés précédemment.
+L'objectif est de terminer la rédaction à l'été 2021 pour défendre courant automne 2021.
 \\
+
+\begin{table}
+  \small
+  \begin{tabular} {c | p{11cm}}
+    Aujourd'hui - Automne 2020 & Validation de RenamableLogootSplit en cas d'opérations de renommage concurrentes \\
+    Automne 2020 - Printemps 2021 & Proposition de stratégies pour gérer le déclenchement de l'opération de renommage \\
+    Automne 2020 - Été 2021 & Rédaction du manuscript de thèse
+  \end{tabular}
+  \caption{Récapitulatif du planning prévisionnel}
+\end{table}
 
 \noindent\textbf{Publications:}
 \commentaire{%
